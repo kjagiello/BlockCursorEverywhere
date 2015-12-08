@@ -27,10 +27,11 @@ class BlockCursorEverywhere(sublime_plugin.EventListener):
     def on_selection_modified(self, view):
         is_widget = view.settings().get('is_widget')
         command_mode = view.settings().get('command_mode')
-
-        if is_widget or not self.vi_enabled or (self.vi_enabled and not(command_mode)):
-            view.erase_regions('BlockCursorListener')
-            return
+        
+        if not view.settings().get('force_block_cursor_everywhere', False):
+            if is_widget or not self.vi_enabled or (self.vi_enabled and not(command_mode)):
+                view.erase_regions('BlockCursorListener')
+                return
 
         self.show_block_cursor(view)
 
